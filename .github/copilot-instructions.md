@@ -36,10 +36,7 @@ This is a **Clean Architecture** .NET 9.0 microservice-based hotel booking syste
 dotnet build MySolution.sln
 
 # Run API project
-cd API; dotnet run
-
-# Or use launch profiles (see API/Properties/launchSettings.json)
-dotnet run --launch-profile https  # Runs on https://localhost:7291
+cd API; dotnet watch
 ```
 
 The API uses:
@@ -175,7 +172,7 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBeh
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("Marten")!);
-    options.DatabaseSchemaName = "booking";
+    options.DatabaseSchemaName = "hotel_booking";
 
     // Event sourcing for booking aggregate
     options.Events.StreamIdentity = StreamIdentity.AsGuid;

@@ -1,6 +1,56 @@
 @API_HostAddress = http://localhost:5212
+@API_HTTPS = https://localhost:7291
 
-GET {{API_HostAddress}}/weatherforecast/
+### Health Check
+GET {{API_HostAddress}}/
 Accept: application/json
+
+###
+
+### Create a new booking
+POST {{API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "guestName": "John Doe",
+  "guestEmail": "john.doe@example.com",
+  "guestPhone": "+1234567890",
+  "roomId": "ROOM-101",
+  "checkInDate": "2026-02-01",
+  "checkOutDate": "2026-02-05",
+  "numberOfGuests": 2,
+  "totalAmount": 500.00,
+  "notes": "Late check-in requested"
+}
+
+###
+
+### Get all bookings
+GET {{API_HostAddress}}/api/bookings
+Accept: application/json
+
+###
+
+### Get booking by ID (replace with actual ID from create response)
+@bookingId = 00000000-0000-0000-0000-000000000000
+GET {{API_HostAddress}}/api/bookings/{{bookingId}}
+Accept: application/json
+
+###
+
+### Test validation - Invalid email
+POST {{API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "guestName": "Jane Smith",
+  "guestEmail": "invalid-email",
+  "guestPhone": "+1234567890",
+  "roomId": "ROOM-102",
+  "checkInDate": "2026-02-01",
+  "checkOutDate": "2026-02-05",
+  "numberOfGuests": 1,
+  "totalAmount": 300.00
+}
 
 ###

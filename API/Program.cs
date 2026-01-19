@@ -1,5 +1,7 @@
 using Carter;
 using Marten;
+using FluentValidation;
+using Application.Common.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +14,20 @@ builder.Services.AddReverseProxy()
 
 builder.Services.AddCarter();
 
+// Add MediatR
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyReference).Assembly);
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
+
+// Add FluentValidation
+builder.Services.AddValidatorsFromAssembly(typeof(Application.AssemblyReference).Assembly);
+
+// Add Marten
 builder.Services.AddMarten(options =>
 {
-
     options.Connection(builder.Configuration.GetConnectionString("Marten")!);
-
     options.DatabaseSchemaName = "hotel_booking";
 }).UseLightweightSessions();
 
