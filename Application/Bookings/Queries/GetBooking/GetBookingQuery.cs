@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Entities.Enums;
 using MediatR;
 
 namespace Application.Bookings.Queries.GetBooking;
@@ -15,7 +16,7 @@ public record BookingResponse(
     DateOnly CheckOutDate,
     int NumberOfGuests,
     decimal TotalAmount,
-    string Status,
+    BookingStatus Status,
     DateTime CreatedAt,
     string? Notes
 );

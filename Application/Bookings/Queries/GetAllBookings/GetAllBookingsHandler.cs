@@ -1,33 +1,42 @@
-using Marten;
+﻿using Application.Abstractions;
+using Application.Common.Models;
 using MediatR;
 
 namespace Application.Bookings.Queries.GetAllBookings;
 
-public class GetAllBookingsHandler : IRequestHandler<GetAllBookingsQuery, List<BookingListItem>>
+public class GetAllBookingsHandler : IRequestHandler<GetAllBookingsQuery, PagedResult<BookingListItem>>
 {
-    private readonly IDocumentSession _session;
+    private readonly IBookingRepository _bookingRepository;
 
-    public GetAllBookingsHandler(IDocumentSession session)
+    public GetAllBookingsHandler(IBookingRepository bookingRepository)
     {
-        _session = session;
+        _bookingRepository = bookingRepository;
     }
 
-    public async Task<List<BookingListItem>> Handle(GetAllBookingsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<BookingListItem>> Handle(GetAllBookingsQuery request, CancellationToken ct)
     {
-        var bookings = await _session
-            .Query<Domain.Entities.Booking>()
-            .OrderByDescending(b => b.CreatedAt)
-            .ToListAsync(cancellationToken);
+        var (bookings, totalCount) = await _bookingRepository.GetPagedAsync(
+            request.PageNumber,
+            request.PageSize,
+            ct
+        );
 
-        return bookings.Select(b => new BookingListItem(
+        var items = bookings.Select(b => new BookingListItem(
             b.Id,
             b.GuestName,
             b.GuestEmail,
             b.RoomId,
             b.CheckInDate,
             b.CheckOutDate,
-            b.Status.ToString(),
+            b.Status,
             b.TotalAmount
         )).ToList();
+
+        return new PagedResult<BookingListItem>(
+            items,
+            totalCount,
+            request.PageNumber,
+            request.PageSize
+        );
     }
 }

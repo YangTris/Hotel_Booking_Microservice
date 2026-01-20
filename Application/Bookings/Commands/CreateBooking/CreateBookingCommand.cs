@@ -12,9 +12,9 @@ public record CreateBookingCommand(
     int NumberOfGuests,
     decimal TotalAmount,
     string? Notes
-) : IRequest<CreateBookingResult>;
+) : IRequest<CreateBookingResponse>;
 
-public record CreateBookingResult(
+public record CreateBookingResponse(
     Guid BookingId,
     string Status,
     string Message

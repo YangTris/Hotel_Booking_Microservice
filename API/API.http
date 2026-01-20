@@ -25,8 +25,20 @@ Content-Type: application/json
 
 ###
 
-### Get all bookings
-GET {{API_HostAddress}}/api/bookings
+### Get all bookings (first page, default page size)
+GET {{API_HostAddress}}/api/bookings?pageNumber=1&pageSize=10
+Accept: application/json
+
+###
+
+### Get all bookings (second page)
+GET {{API_HostAddress}}/api/bookings?pageNumber=2&pageSize=10
+Accept: application/json
+
+###
+
+### Get all bookings (custom page size)
+GET {{API_HostAddress}}/api/bookings?pageNumber=1&pageSize=5
 Accept: application/json
 
 ###
